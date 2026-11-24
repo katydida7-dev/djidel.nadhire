@@ -217,8 +217,8 @@ function draw() {
 async function start() {
   const {data: {session}} = await sb.auth.getSession();
   if (!session) return loginView();
-  const {data} = await sb.from("profiles").select("*").eq("id", session.user.id).single();
-  if (!data) { await sb.auth.signOut(); return loginView("الحساب غير جاهز، حاول مجدداً"); }
+  const {data, error} = await sb.from("profiles").select("*").eq("id", session.user.id).single();
+  if (!data) { await sb.auth.signOut(); return loginView("الحساب غير جاهز" + (error ? " (" + error.message + ")" : "")); }
   me = data; await refresh();
 }
 start();
